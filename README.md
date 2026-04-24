@@ -35,6 +35,31 @@ User-facing behavior is consistent across these classifiers:
 
 This makes the library usable on datasets such as Iris without collapsing labels into a binary task.
 
+## Metrics
+
+`ml/metrics/Metrics.hpp` now includes classification, ranking, and regression helpers that work with the library's current prediction APIs:
+
+- hard-label classification metrics: `accuracy_score`, `confusion_matrix`, `classification_report`, `precision_score`, `recall_score`, `f1_score`
+- score-based classification metrics: `roc_auc_score`, `roc_auc_report`
+- regression metrics: `mean_squared_error`, `mean_absolute_error`, `root_mean_squared_error`, `r2_score`, `regression_report`
+
+Example:
+
+```cpp
+#include "ml/metrics/Metrics.hpp"
+
+ml::Matrix predictions = model.predict(x_test);
+ml::ClassificationReport report = ml::classification_report(predictions, y_test);
+
+double macro_f1 = report.macro_f1;
+double micro_precision = report.micro_precision;
+
+double auc = ml::roc_auc_score(model.predict_proba(x_test), y_test, model.classes());
+ml::RegressionReport regression = ml::regression_report(model.predict(x_test), y_test);
+```
+
+For binary classifiers, `roc_auc_score` expects the library's existing `N x 1` score/probability output. For multiclass classifiers, it expects `N x K` scores ordered by `model.classes()`.
+
 ## Build
 
 If `cmake` is available:
