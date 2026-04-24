@@ -7,3 +7,4 @@ example_data_pipeline
 output/
 data/*.csv
 *.swp
+.github/
