@@ -14,7 +14,7 @@ After the final time step, a dense output layer maps the hidden state to a predi
 \hat{y} = \sigma(W_y h_T + b_y)
 \]
 
-The hidden state acts like a running summary of the sequence.
+For multiclass problems the output layer becomes a `K`-way softmax over the final hidden state. The hidden state acts like a running summary of the sequence.
 
 ## Algorithm Steps
 
@@ -39,4 +39,5 @@ update output layer during training
 ml::SimpleRNN rnn(10, 4, 16, 0.05, 800);
 rnn.fit(sequence_matrix, labels);
 ml::Matrix probs = rnn.predict_proba(sequence_matrix);
+ml::Matrix classes = rnn.predict(sequence_matrix);
 ```

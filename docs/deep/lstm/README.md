@@ -32,7 +32,7 @@ for each time step
   compute forget, input, output, and candidate gates
   update memory cell
   update hidden state
-map final hidden state to an output probability
+map final hidden state to a sigmoid or softmax output layer
 ```
 
 ## Complexity Analysis
@@ -47,4 +47,5 @@ map final hidden state to an output probability
 ml::SimpleLSTM lstm(10, 4, 16, 0.03, 1000);
 lstm.fit(sequence_matrix, labels);
 ml::Matrix probs = lstm.predict_proba(sequence_matrix);
+ml::Matrix classes = lstm.predict(sequence_matrix);
 ```

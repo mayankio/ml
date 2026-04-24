@@ -16,6 +16,25 @@ This project is a from-scratch, object-oriented machine learning library written
 - Educational neural-network and transformer-style components
 - A data plumbing layer with CSV parsing, scaling, encoding, and dataset splitting
 
+## Multiclass Classification
+
+The library now supports multiclass classification across the main classification stack:
+
+- `ml::LogisticRegression` uses sigmoid for binary targets and softmax for `K > 2` classes.
+- `ml::LinearSVM` uses binary margin scoring for two classes and one-vs-rest heads for multiclass problems.
+- `ml::MLPClassifier`, `ml::SimpleCNN`, `ml::SimpleRNN`, `ml::SimpleLSTM`, and `ml::TransformerClassifier` now expose multiclass output heads.
+
+User-facing behavior is consistent across these classifiers:
+
+- `fit(x, y)` expects `y` as an `N x 1` matrix of integer class ids.
+- `predict(x)` returns an `N x 1` matrix of predicted class ids.
+- `predict_proba(x)` returns:
+  - `N x 1` probabilities for binary models
+  - `N x K` probabilities for multiclass models, ordered by `model.classes()`
+- `classes()` returns the original class labels used during training and `num_classes()` reports `K`.
+
+This makes the library usable on datasets such as Iris without collapsing labels into a binary task.
+
 ## Build
 
 If `cmake` is available:
@@ -38,10 +57,34 @@ c++ -std=c++17 -Iinclude -Itests src/linear/*.cpp src/probabilistic/*.cpp src/op
 - `ml::Model` provides a shared interface with `fit`, `predict`, `save`, and `load`.
 - `ml::Matrix` is a small custom dense matrix class used across all models.
 - Deep-learning and transformer components are intentionally simplified so the code stays readable for students.
+- The sequence, CNN, and transformer models still train their final classification heads only; they are educational encoders with trainable readouts rather than full end-to-end deep-learning implementations.
 
 ## Data Pipeline
 
 See [docs/data_preprocessing/README.md](/Users/dksingh/src/ml/docs/data_preprocessing/README.md) for the CSV-to-model workflow and [data_pipeline.cpp](/Users/dksingh/src/ml/examples/data_pipeline.cpp) for a compact end-to-end example.
+
+The Iris example now runs as a true 3-class classification pipeline:
+
+1. Read the CSV fixture.
+2. Label-encode species into integer ids.
+3. Scale numeric features.
+4. Train multiclass logistic regression.
+5. Decode predictions back to species labels.
+
+## Tests
+
+The project uses small assert-based tests that are fast enough to run locally on every change:
+
+```bash
+ctest --test-dir build --output-on-failure
+```
+
+There is dedicated multiclass coverage in [test_multiclass_models.cpp](/Users/dksingh/src/ml/tests/test_multiclass_models.cpp), including:
+
+- softmax logistic regression on a 3-class dataset
+- one-vs-rest linear SVM on a 3-class dataset
+- multiclass probability-shape checks for MLP, CNN, RNN, LSTM, and transformer classifiers
+- save/load round trips for the upgraded classifiers
 
 ## Fetch, Train, Plot
 

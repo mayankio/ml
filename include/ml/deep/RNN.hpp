@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "ml/core/Model.hpp"
 
 namespace ml {
@@ -11,6 +13,8 @@ public:
     void fit(const Matrix& features, const Matrix& targets) override;
     Matrix predict(const Matrix& features) const override;
     Matrix predict_proba(const Matrix& features) const;
+    [[nodiscard]] const std::vector<int>& classes() const;
+    [[nodiscard]] std::size_t num_classes() const;
     void save(const std::string& path) const override;
     void load(const std::string& path) override;
 
@@ -24,7 +28,8 @@ private:
     Matrix wh_;
     Matrix wy_;
     std::vector<double> bh_;
-    double by_ = 0.0;
+    std::vector<double> by_;
+    std::vector<int> classes_;
 };
 
 class SimpleLSTM : public Model {
@@ -34,6 +39,8 @@ public:
     void fit(const Matrix& features, const Matrix& targets) override;
     Matrix predict(const Matrix& features) const override;
     Matrix predict_proba(const Matrix& features) const;
+    [[nodiscard]] const std::vector<int>& classes() const;
+    [[nodiscard]] std::size_t num_classes() const;
     void save(const std::string& path) const override;
     void load(const std::string& path) override;
 
@@ -52,7 +59,8 @@ private:
     std::vector<double> bi_;
     std::vector<double> bo_;
     std::vector<double> bc_;
-    double by_ = 0.0;
+    std::vector<double> by_;
+    std::vector<int> classes_;
 };
 
 }  // namespace ml

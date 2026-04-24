@@ -29,7 +29,7 @@ ml::LabelEncoder label_encoder;
 std::vector<int> y_ids = label_encoder.fit_transform(iris.column("species"));
 ml::Matrix y(y_ids.size(), 1);
 for (std::size_t i = 0; i < y_ids.size(); ++i) {
-    y(i, 0) = static_cast<double>(y_ids[i] == 0 ? 0 : 1);
+    y(i, 0) = static_cast<double>(y_ids[i]);
 }
 
 ml::StandardScaler scaler;
@@ -40,6 +40,7 @@ ml::MatrixSplit split = ml::train_test_split(x_scaled, y, 0.2, 42);
 ml::LogisticRegression model(0.1, 2000);
 model.fit(split.x_train, split.y_train);
 ml::Matrix preds = model.predict(split.x_test);
+ml::Matrix probs = model.predict_proba(split.x_test);
 ```
 
 ## CSV Parsing Notes
@@ -70,6 +71,7 @@ For the default range, `a = 0` and `b = 1`.
 
 - `LabelEncoder` maps strings like `"Setosa"` to integer ids and can invert them back to strings.
 - `OneHotEncoder` maps each category to a one-of-K binary row.
+- Multiclass classifiers in this library expect those encoded labels as an `N x 1` matrix of integer class ids.
 
 ## Tests
 

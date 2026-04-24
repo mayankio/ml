@@ -20,7 +20,7 @@ Decoder blocks add masked attention and often cross-attention to encoder outputs
 apply self-attention across the sequence
 pass token representations through a feed-forward network
 pool token states into a single sequence summary
-map the summary to an output probability
+map the summary to a sigmoid or softmax output head
 ```
 
 ## Complexity Analysis
@@ -35,4 +35,5 @@ map the summary to an output probability
 ml::TransformerClassifier model(seq_len, embed_dim, proj_dim, hidden_dim);
 model.fit(flattened_sequence_matrix, labels);
 ml::Matrix probs = model.predict_proba(flattened_sequence_matrix);
+ml::Matrix classes = model.predict(flattened_sequence_matrix);
 ```

@@ -41,8 +41,7 @@ Matrix SelfAttention::predict(const Matrix& features) const {
     return forward(features);
 }
 
-void SelfAttention::save(const std::string& path) const {
-    std::ofstream out(path);
+void SelfAttention::save(std::ostream& out) const {
     out << sequence_length_ << ' ' << embedding_dim_ << ' ' << projection_dim_ << '\n';
     save_matrix(out, wq_);
     save_matrix(out, wk_);
@@ -50,13 +49,22 @@ void SelfAttention::save(const std::string& path) const {
     save_matrix(out, wo_);
 }
 
-void SelfAttention::load(const std::string& path) {
-    std::ifstream in(path);
+void SelfAttention::load(std::istream& in) {
     in >> sequence_length_ >> embedding_dim_ >> projection_dim_;
     wq_ = load_matrix(in);
     wk_ = load_matrix(in);
     wv_ = load_matrix(in);
     wo_ = load_matrix(in);
+}
+
+void SelfAttention::save(const std::string& path) const {
+    std::ofstream out(path);
+    save(out);
+}
+
+void SelfAttention::load(const std::string& path) {
+    std::ifstream in(path);
+    load(in);
 }
 
 }  // namespace ml

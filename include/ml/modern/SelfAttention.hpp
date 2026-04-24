@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iosfwd>
+
 #include "ml/core/Model.hpp"
 
 namespace ml {
@@ -10,6 +12,8 @@ public:
 
     void fit(const Matrix& features, const Matrix& targets) override;
     Matrix predict(const Matrix& features) const override;
+    void save(std::ostream& out) const;
+    void load(std::istream& in);
     void save(const std::string& path) const override;
     void load(const std::string& path) override;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "ml/core/Model.hpp"
 
 namespace ml {
@@ -11,6 +13,8 @@ public:
     void fit(const Matrix& features, const Matrix& targets) override;
     Matrix predict(const Matrix& features) const override;
     Matrix decision_function(const Matrix& features) const;
+    [[nodiscard]] const std::vector<int>& classes() const;
+    [[nodiscard]] std::size_t num_classes() const;
     void save(const std::string& path) const override;
     void load(const std::string& path) override;
 
@@ -19,8 +23,9 @@ private:
     std::size_t epochs_;
     double c_;
     bool hard_margin_;
-    std::vector<double> weights_;
-    double bias_ = 0.0;
+    Matrix weights_;
+    std::vector<double> bias_;
+    std::vector<int> classes_;
 };
 
 }  // namespace ml

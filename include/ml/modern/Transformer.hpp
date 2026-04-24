@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "ml/core/Model.hpp"
 #include "ml/modern/SelfAttention.hpp"
 
@@ -12,6 +14,8 @@ public:
     void fit(const Matrix& features, const Matrix& targets) override;
     Matrix predict(const Matrix& features) const override;
     Matrix predict_proba(const Matrix& features) const;
+    [[nodiscard]] const std::vector<int>& classes() const;
+    [[nodiscard]] std::size_t num_classes() const;
     void save(const std::string& path) const override;
     void load(const std::string& path) override;
 
@@ -30,7 +34,8 @@ private:
     std::vector<double> b1_;
     std::vector<double> b2_;
     Matrix out_;
-    double out_bias_ = 0.0;
+    std::vector<double> out_bias_;
+    std::vector<int> classes_;
 };
 
 }  // namespace ml

@@ -298,7 +298,7 @@ inline std::size_t argmax(const std::vector<double>& values) {
     return static_cast<std::size_t>(std::distance(values.begin(), std::max_element(values.begin(), values.end())));
 }
 
-inline void save_matrix(std::ofstream& out, const Matrix& matrix) {
+inline void save_matrix(std::ostream& out, const Matrix& matrix) {
     out << matrix.rows() << ' ' << matrix.cols() << '\n';
     for (double value : matrix.data()) {
         out << value << ' ';
@@ -306,7 +306,7 @@ inline void save_matrix(std::ofstream& out, const Matrix& matrix) {
     out << '\n';
 }
 
-inline Matrix load_matrix(std::ifstream& in) {
+inline Matrix load_matrix(std::istream& in) {
     std::size_t rows = 0;
     std::size_t cols = 0;
     in >> rows >> cols;
@@ -315,6 +315,26 @@ inline Matrix load_matrix(std::ifstream& in) {
         in >> value;
     }
     return matrix;
+}
+
+template <typename T>
+inline void save_vector(std::ostream& out, const std::vector<T>& values) {
+    out << values.size() << '\n';
+    for (const T& value : values) {
+        out << value << ' ';
+    }
+    out << '\n';
+}
+
+template <typename T>
+inline std::vector<T> load_vector(std::istream& in) {
+    std::size_t size = 0;
+    in >> size;
+    std::vector<T> values(size);
+    for (T& value : values) {
+        in >> value;
+    }
+    return values;
 }
 
 }  // namespace ml
