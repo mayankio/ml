@@ -54,3 +54,21 @@ For a full educational workflow:
    `python3 tools/plot_results.py --metrics output/metrics.csv --confusion output/confusion_pairs.csv --grid output/prediction_grid.csv`
 
 The fetcher writes clean CSVs to `data/`, the C++ code writes run artifacts to `output/`, and the plotting tool saves PNGs to `output/plots/`.
+
+## Publish To GitHub
+
+This repository is ready to push to GitHub with standard git commands:
+
+```bash
+git remote add origin https://github.com/<your-user>/<your-repo>.git
+git push -u origin main
+```
+
+If you prefer SSH:
+
+```bash
+git remote add origin git@github.com:<your-user>/<your-repo>.git
+git push -u origin main
+```
+
+This repo also includes a GitHub Actions workflow at `.github/workflows/ci.yml` so pushes and pull requests automatically build the project and run the test suite.
