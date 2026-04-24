@@ -42,3 +42,15 @@ c++ -std=c++17 -Iinclude -Itests src/linear/*.cpp src/probabilistic/*.cpp src/op
 ## Data Pipeline
 
 See [docs/data_preprocessing/README.md](/Users/dksingh/src/ml/docs/data_preprocessing/README.md) for the CSV-to-model workflow and [data_pipeline.cpp](/Users/dksingh/src/ml/examples/data_pipeline.cpp) for a compact end-to-end example.
+
+## Fetch, Train, Plot
+
+For a full educational workflow:
+
+1. Fetch datasets:
+   `python3 scripts/fetch_datasets.py`
+2. Compile and run your C++ experiment so it writes metrics to `output/` using [MetricsLogger.hpp](/Users/dksingh/src/ml/include/MetricsLogger.hpp).
+3. Generate plots:
+   `python3 tools/plot_results.py --metrics output/metrics.csv --confusion output/confusion_pairs.csv --grid output/prediction_grid.csv`
+
+The fetcher writes clean CSVs to `data/`, the C++ code writes run artifacts to `output/`, and the plotting tool saves PNGs to `output/plots/`.
